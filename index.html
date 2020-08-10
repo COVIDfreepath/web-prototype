@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+        <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <!-- in case we want this feature to be optional <button onclick="getLocation()">Get your coordinates</button> -->
+        <!-- <p id="getLoc"></p> -->
+
+        <h1>COVIDfree-path</h1>
+
+        <input id="searchbar" onkeyup="mapMarkers()" type="text" name="search" placeholder="Search places...">
+        <div id="map"></div>
+    </body>
+</html>
+<script>
+    var locArr = [];
+    var hitsArr = [];
+    var bounds;
+
+    // Load the tile images from OpenStreetMap
+    var mytiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }
+    );
+
+    // Initialise an empty map and center on user location
+    var map = L.map('map');
+    getLocation();
+
+    var layerGroup = L.LayerGroup();
+    mapMarkers();
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        locArr.push(position.coords.latitude, position.coords.longitude);
+
+        getBounds()
+        showMap();
+    }
+
+    function getBounds() {
+        // please dont ask about these calculations
+        deltaLat = 360 * 16 / 3963
+        deltaLng = deltaLat * Math.cos(locArr[0] * (Math.PI / 180))
+
+        southwestCoord = [locArr[0] - deltaLat, locArr[1] - deltaLng]
+        northeastCoord = [locArr[0] + deltaLat, locArr[1] + deltaLng]
+
+        bounds = L.latLngBounds(southwestCoord, northeastCoord)
+    }
+
+    function showMap() {
+        // Add the tiles to the map, and initialise the view on the user
+        map.addLayer(mytiles).setView(locArr, 8);
+        // map.addLayer(mytiles).fitBounds(bounds);
+
+        L.marker(locArr).addTo(map)
+        .bindPopup('Your current location').openPopup();
+    }
+
+    function mapMarkers() {
+      // TODO: call search functions and display heat maps using geolocation data
+      console.log('yo, i cant do search yet hold up...')
+    }
+</script>

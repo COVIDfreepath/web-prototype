@@ -1,0 +1,31 @@
+h1 {
+  font-family: 'Trebuchet MS', Helvetica, sans-serif;
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+#searchbar {
+   margin-left: auto;
+   padding: 15px;
+   border-radius: 10px;
+}
+
+input[type=text] {
+    width: 30%;
+    -webkit-transition: width 0.15s ease-in-out;
+    transition: width 0.15s ease-in-out;
+}
+
+/* When the input field gets focuschange its width to 100% */
+input[type=text]:focus {
+   width: 70%;
+}
+
+body {
+    background-color: rgb(230, 230, 255);
+}
+
+#map {
+    margin-top: 8em;
+    height: 600px;
+}
